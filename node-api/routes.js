@@ -4,10 +4,8 @@ const upload = require("./middleware/csv_controller");
 const uploadHandler = require("./middleware/upload");
 const auth = require("./middleware/auth");
 const {login, register} = require("./middleware/login")
-const {Users, Data, blocked, interested, answered, callLater, emailMe, editing, getData} = require("./database");
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-var ObjectId = require('mongodb').ObjectId;
+const {Users, Data, blocked, interested, answered, callLater, emailMe, editing, booked, getData} = require("./database");
+
 
 let routes = (app) => {
     router.post("/upload", auth, uploadHandler.single("file"), upload);
@@ -19,6 +17,7 @@ let routes = (app) => {
     router.post('/callLater', auth, callLater);
     router.post('/emailMe', auth, emailMe);
     router.post('/editing', auth, editing);
+    router.post("/booked", booked);
     router.post("/register", register);
     app.use("/api", router);
 };

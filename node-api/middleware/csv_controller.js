@@ -1,7 +1,6 @@
 const fs = require("fs");
 const csv = require("fast-csv");
 const {Users, Data} = require("../database");
-// const { alertClasses } = require("@mui/material");
 
 const upload = async (req, res) => {
   try {
@@ -12,7 +11,7 @@ const upload = async (req, res) => {
 
     let numbers = [];
     let path = __basedir + req.file.filename;
-    const addProperties = {"lastCalled":new Date(1), "blocked":false, "interested":false, "answered":false, "callLater":false, "emailMe":false, "editing":false}
+    const addProperties = {"lastCalled":new Date(1), "blocked":false, "interested":false, "answered":false, "callDate":null, "emailMe":false, "editing":false, "booked":false}
     const data = fs.readFileSync(path, {encoding:"utf-8"})
     const headers = "website,number\n"
     fs.writeFileSync(path, headers+data);

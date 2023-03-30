@@ -1,11 +1,8 @@
-
-
 const MongoClient = require('mongodb').MongoClient;
-const ObjectId= require('mongodb').ObjectId;
 const url = 'mongodb://root:LetsGetDigi123@159.69.180.8:27017';
 const dbName = 'test';
 const client = new MongoClient(url, { useNewUrlParser: true });
-
+var ObjectId = require('mongodb').ObjectId;
 client.connect(function (err) {
   if (err) {
     console.error('Failed to connect to MongoDB database', err);
@@ -20,102 +17,128 @@ const Data = db.collection('Data');
 
 
 const blocked = async (req, res) => {
-  const { _id,  blocked} = req.body;
+  const { _id, field } = req.body;
   console.log(req.body)
-  if(!(_id && typeof blocked !== 'undefined')) {
+  if (!(_id && blocked)) {
     return res.status(401).send({ message: 'All fields are required' });
   }
   // Retrieve the user from the MongoDB database
-  const daysOld = 30
-  const millis = daysOld * 24 * 60 * 60 * 1000
-  const compDate = new Date((new Date().getTime() - millis))
-  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{blocked:blocked, lastCalled:compDate}});
-  // const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{blocked:blocked}, $currentDate:{lastModified:true, lastCalled:true}});
+  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{blocked:field}, $currentDate:{lastModified:true, lastCalled:true}});
+
 
   if (!update) {
     return res.status(401).send({ message: 'record not found' });
   }
-  res.send({"message":"updated" });
+  res.send({ "message": "updated" });
 }
-
 const interested = async (req, res) => {
-  const { _id,  interested} = req.body;
+  const { _id, field } = req.body;
   console.log(req.body)
-  if(!(_id && typeof interested !== 'undefined')) {
+  if (!(_id && interested)) {
     return res.status(401).send({ message: 'All fields are required' });
   }
   // Retrieve the user from the MongoDB database
-  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{interested:interested}, $currentDate:{lastModified:true, lastCalled:true}});
+  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{interested:field}, $currentDate:{lastModified:true, lastCalled:true}});
+
 
   if (!update) {
     return res.status(401).send({ message: 'record not found' });
   }
-  res.send({"message":"updated" });
+  res.send({ "message": "updated" });
 }
 const answered = async (req, res) => {
-  const { _id,  answered } = req.body;
+  const { _id, field } = req.body;
   console.log(req.body)
-  if(!(_id && typeof answered !== 'undefined')) {
+  if (!(_id && answered)) {
     return res.status(401).send({ message: 'All fields are required' });
   }
   // Retrieve the user from the MongoDB database
-  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{answered:answered}, $currentDate:{lastModified:true, lastCalled:true}});
+  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{answered:field}, $currentDate:{lastModified:true, lastCalled:true}});
+
 
   if (!update) {
     return res.status(401).send({ message: 'record not found' });
   }
-  res.send({"message":"updated" });
+  res.send({ "message": "updated" });
 }
 const callLater = async (req, res) => {
-  const { _id,  callLater} = req.body;
+  const { _id, field } = req.body;
   console.log(req.body)
-  if(!(_id && typeof callLater !== 'undefined')) {
+  if (!(_id && callLater)) {
     return res.status(401).send({ message: 'All fields are required' });
   }
-  // Retrieve the user from the MongoDB database
-  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{callLater:callLater}, $currentDate:{lastModified:true, lastCalled:true}});
+  try{
+    const date = new Date(field);
+    const isoDate = date.toISOString();
+    // Retrieve the user from the MongoDB database
+    const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{callLater:field}, $currentDate:{lastModified:true, lastCalled:true}});
 
-  if (!update) {
-    return res.status(401).send({ message: 'record not found' });
+  
+    if (!update) {
+      return res.status(401).send({ message: 'record not found' });
+    }
+  }catch{
+    return res.status(401).send({ message: 'date field is not correct' });
   }
-  res.send({"message":"updated" });
+  res.send({ "message": "updated" });
 }
 const emailMe = async (req, res) => {
-  const { _id,  emailMe} = req.body;
+  const { _id, field } = req.body;
   console.log(req.body)
-  if(!(_id && typeof emailMe !== 'undefined')) {
+  if (!(_id && emailMe)) {
     return res.status(401).send({ message: 'All fields are required' });
   }
   // Retrieve the user from the MongoDB database
-  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{emailMe:emailMe}, $currentDate:{lastModified:true, lastCalled:true}});
+  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{emailMe:field}, $currentDate:{lastModified:true, lastCalled:true}});
+
 
   if (!update) {
     return res.status(401).send({ message: 'record not found' });
   }
-  res.send({"message":"updated" });
+  res.send({ "message": "updated" });
 }
 const editing = async (req, res) => {
-  const { _id,  editing} = req.body;
+  const { _id, field } = req.body;
   console.log(req.body)
-  if(!(_id && typeof editing !== 'undefined')) {
+  if (!(_id && field)) {
     return res.status(401).send({ message: 'All fields are required' });
   }
   // Retrieve the user from the MongoDB database
-  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{editing:editing}, $currentDate:{lastModified:true, lastCalled:true}});
+  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{editing:field}, $currentDate:{lastModified:true, lastCalled:true}});
+
 
   if (!update) {
     return res.status(401).send({ message: 'record not found' });
   }
-  res.send({"message":"updated" });
+  res.send({ "message": "updated" });
 }
-
+const booked = async (req, res) => {
+  const { _id, field } = req.body;
+  console.log(req.body)
+  if (!(_id && field)) {
+    return res.status(401).send({ message: 'All fields are required' });
+  }
+  try{
+    const date = new Date(field);
+    const isoDate = date.toISOString();
+    // Retrieve the user from the MongoDB database
+    const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{booked:field}, $currentDate:{lastModified:true, lastCalled:true}});
+  
+    if (!update) {
+      return res.status(401).send({ message: 'record not found' });
+    }
+  }catch{
+    return res.status(401).send({ message: 'date field is not correct' });
+  }
+  res.send({ "message": "updated" });
+}
 const getData = async (req, res) => {
   try {
   const daysOld = 15
   const millis = daysOld * 24 * 60 * 60 * 1000
   const compDate = new Date((new Date().getTime() - millis))
   
-  const data =  await Data.aggregate([{$match:{lastCalled:{$lt:compDate}, blocked:false, editing:false}},{$sample:{size:1}}])
+  const data = await Data.aggregate([{$match:{lastCalled:{$lt:compDate}, blocked:false, editing:false}},{$sample:{size:1}}])
   for await (const doc of data) {
     console.log(doc);
     res.send(doc);
@@ -128,4 +151,4 @@ const getData = async (req, res) => {
     });
   }
 };
-module.exports = {Users,Data, blocked, interested, answered, callLater, emailMe, editing, getData};
+module.exports = { Users, Data, blocked, interested, answered, callLater, emailMe, editing, booked, getData };
