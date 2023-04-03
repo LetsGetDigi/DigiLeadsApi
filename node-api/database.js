@@ -35,12 +35,16 @@ const blocked = async (req, res) => {
 const interested = async (req, res) => {
   const { _id, field } = req.body;
   console.log(req.body)
-  if (!(_id && interested)) {
+  if (!(_id && typeof field !== 'undefined')) {
     return res.status(401).send({ message: 'All fields are required' });
   }
   // Retrieve the user from the MongoDB database
   const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{interested:field}, $currentDate:{lastModified:true, lastCalled:true}});
-  const increment = await Analytics.updateOne({}, {$inc: {interested: 1}});
+  if(field){
+    await Analytics.updateOne({}, {$inc: {interested: 1}});
+  }else{
+    await Analytics.updateOne({}, {$inc: {notInterested: 1}});
+  }
 
 
   if (!update) {
@@ -51,12 +55,16 @@ const interested = async (req, res) => {
 const answered = async (req, res) => {
   const { _id, field } = req.body;
   console.log(req.body)
-  if (!(_id && answered)) {
+  if (!(_id && typeof field !== 'undefined')) {
     return res.status(401).send({ message: 'All fields are required' });
   }
   // Retrieve the user from the MongoDB database
   const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{answered:field}, $currentDate:{lastModified:true, lastCalled:true}});
-  const increment = await Analytics.updateOne({}, {$inc: {answered: 1}});
+  if(field){
+    await Analytics.updateOne({}, {$inc: {answered: 1}});
+  }else{
+    await Analytics.updateOne({}, {$inc: {noAnswer: 1}});
+  }
 
 
   if (!update) {
@@ -187,10 +195,28 @@ const analytics = async (req, res) => {
     
     res.status(500).send({
       message:
-      err.message || "Some error occurred while retrieving tutorials.",
+      err.message || "Some error occurred while retrieving data.",
     });
   }
 };
+
+const contacts = async (req, res) => {
+  try {
+    const docs = await Data.find({
+      $or: [
+        { booked: true },
+        { emailMe: true },
+        {callLater:true}
+      ]
+    }).toArray();
+
+    res.json(docs);
+  } catch (err) {
+    console.log('Error running query:', err);
+    res.status(500).send('Error running query');
+  }
+};
+
 const getData = async (req, res) => {
   try {
   const daysOld = 15
@@ -210,4 +236,4 @@ const getData = async (req, res) => {
     });
   }
 };
-module.exports = { Users, Data, blocked, interested, answered, callLater, emailMe, editing, booked, voicemail, analytics,remove, getData };
+module.exports = { Users, Data, blocked, interested, answered, callLater, emailMe, editing, booked, voicemail, analytics,remove, contacts,getData };
