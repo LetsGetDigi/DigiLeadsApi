@@ -82,7 +82,7 @@ const callLater = async (req, res) => {
     const date = new Date(field);
     const isoDate = date.toISOString();
     // Retrieve the user from the MongoDB database
-    const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{callLater:field}, $currentDate:{lastModified:true, lastCalled:true}});
+    const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{callLater:true, callDate:field}, $currentDate:{lastModified:true, lastCalled:true}});
     const increment = await Analytics.updateOne({}, {$inc: {callLater: 1}});
 
   
@@ -94,14 +94,14 @@ const callLater = async (req, res) => {
   }
   res.send({ "message": "updated" });
 }
-const emailMe = async (req, res) => {
+const email = async (req, res) => {
   const { _id, field } = req.body;
   console.log(req.body)
-  if (!(_id && emailMe)) {
+  if (!(_id && field)) {
     return res.status(401).send({ message: 'All fields are required' });
   }
   // Retrieve the user from the MongoDB database
-  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{emailMe:field}, $currentDate:{lastModified:true, lastCalled:true}});
+  const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{email:field, emailMe:true}, $currentDate:{lastModified:true, lastCalled:true}});
   const increment = await Analytics.updateOne({}, {$inc: {emailMe: 1}});
 
 
@@ -133,8 +133,6 @@ const booked = async (req, res) => {
     return res.status(401).send({ message: 'All fields are required' });
   }
   try{
-    const date = new Date(field);
-    const isoDate = date.toISOString();
     // Retrieve the user from the MongoDB database
     const update = await Data.updateOne({ _id:new ObjectId(_id)}, {$set:{booked:field}, $currentDate:{lastModified:true, lastCalled:true}});
     const increment = await Analytics.updateOne({}, {$inc: {booked: 1}});
@@ -236,4 +234,4 @@ const getData = async (req, res) => {
     });
   }
 };
-module.exports = { Users, Data, blocked, interested, answered, callLater, emailMe, editing, booked, voicemail, analytics,remove, contacts,getData };
+module.exports = { Users, Data, blocked, interested, answered, callLater, email, editing, booked, voicemail, analytics,remove, contacts,getData };

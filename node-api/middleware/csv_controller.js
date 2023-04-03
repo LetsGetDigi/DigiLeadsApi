@@ -11,7 +11,7 @@ const upload = async (req, res) => {
 
     let numbers = [];
     let path = __basedir + req.file.filename;
-    const addProperties = {"lastCalled":new Date(1), "blocked":false, "interested":null, "answered":null, "callDate":null, "emailMe":null, "editing":false, "booked":false, "voicemail":false}
+    const addProperties = {"lastCalled":new Date(1), "blocked":false, "interested":null, "answered":null, "callDate":null, "emailMe":null, "editing":false, "booked":false, "voicemail":false, "email":""}
     const data = fs.readFileSync(path, {encoding:"utf-8"})
     const headers = "website,number\n"
     fs.writeFileSync(path, headers+data);

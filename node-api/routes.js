@@ -4,7 +4,7 @@ const upload = require("./middleware/csv_controller");
 const uploadHandler = require("./middleware/upload");
 const auth = require("./middleware/auth");
 const {login, register} = require("./middleware/login")
-const {Users, Data, blocked, interested, answered, callLater, emailMe, editing, booked, voicemail, analytics,remove, getData, contacts} = require("./database");
+const {Users, Data, blocked, interested, answered, callLater, email, editing, booked, voicemail, analytics,remove, getData, contacts} = require("./database");
 
 
 let routes = (app) => {
@@ -15,7 +15,7 @@ let routes = (app) => {
     router.post('/interested', auth, interested);
     router.post('/answered', auth, answered);
     router.post('/callLater', auth, callLater);
-    router.post('/emailMe', auth, emailMe);
+    router.post('/email', auth, email);
     router.post('/editing', auth, editing);
     router.post("/booked", auth, booked);
     router.post("/voicemail", auth, voicemail);
