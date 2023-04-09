@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://root:LetsGetDigi123@159.69.180.8:27017';
+const url = 'mongodb://root:LetsGetDigi123@localhost:27017';
 const dbName = 'test';
 const client = new MongoClient(url, { useNewUrlParser: true });
 var ObjectId = require('mongodb').ObjectId;
