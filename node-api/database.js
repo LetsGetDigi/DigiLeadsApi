@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb+srv://digiLeads:3SsW647kVrckMk8H@cluster0.jfqurv9.mongodb.net/';
+const url = 'mongodb+srv://digiLeads:XZoZyFJMqvRaFTYt@cluster0.jfqurv9.mongodb.net/';
 const dbName = 'leadManagment';
 const client = new MongoClient(url, { useNewUrlParser: true });
 var ObjectId = require('mongodb').ObjectId;
